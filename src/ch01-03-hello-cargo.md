@@ -114,7 +114,7 @@ $ cargo run
 Hello, world!
 ```
 
-Cargo 还提供了一个叫 `cargo check` 的命令。该命令快速检查代码确保其可以编译，但并不产生可执行文件：
+<mark>Cargo 还提供了一个叫 `cargo check` 的命令。该命令快速检查代码确保其可以编译，但并不产生可执行文件</mark>：
 
 ```console
 $ cargo check

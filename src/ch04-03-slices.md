@@ -4,7 +4,7 @@
 > <br>
 > commit 3d51f70c78162faaebcab0da0de2ddd333e7a8ed
 
-*slice* 允许你引用集合中一段连续的元素序列，而不用引用整个集合。slice 是一种引用，所以它没有所有权。
+<mark>*slice* 允许你引用集合中一段连续的元素序列，而不用引用整个集合。slice 是一种引用，所以它没有所有权。</mark>
 
 这里有一个编程小习题：编写一个函数，该函数接收一个用空格分隔单词的字符串，并返回在该字符串中找到的第一个单词。如果函数在该字符串中并未找到空格，则整个字符串就是一个单词，所以应该返回整个字符串。
 
@@ -36,7 +36,7 @@ fn first_word(s: &String) -> ?
 {{#rustdoc_include ../listings/ch04-understanding-ownership/listing-04-07/src/main.rs:iter}}
 ```
 
-我们将在[第十三章][ch13]详细讨论迭代器。现在，只需知道 `iter` 方法返回集合中的每一个元素，而 `enumerate` 包装了 `iter` 的结果，将这些元素作为元组的一部分来返回。`enumerate` 返回的元组中，第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。
+我们将在[第十三章][ch13]详细讨论迭代器。现在，只需知道 `iter` 方法返回集合中的每一个元素，而 `enumerate` 包装了 `iter` 的结果，将这些元素作为元组的一部分来返回。<mark>`enumerate` 返回的元组中，第一个元素是索引，第二个元素是集合中元素的引用。这比我们自己计算索引要方便一些。</mark>
 
 因为 `enumerate` 方法返回一个元组，我们可以使用模式来解构，我们将在[第六章][ch6]中进一步讨论有关模式的问题。所以在 `for` 循环中，我们指定了一个模式，其中元组中的 `i` 是索引而元组中的 `&item` 是单个字节。因为我们从 `.iter().enumerate()` 中获取了集合元素的引用，所以模式中使用了 `&`。
 
@@ -76,7 +76,7 @@ fn second_word(s: &String) -> (usize, usize) {
 {{#rustdoc_include ../listings/ch04-understanding-ownership/no-listing-17-slice/src/main.rs:here}}
 ```
 
-不同于整个 `String` 的引用，`hello` 是一个部分 `String` 的引用，由一个额外的 `[0..5]` 部分指定。可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 索引 6 的指针和长度值 5 的 slice。
+<mark>不同于整个 `String` 的引用，`hello` 是一个部分 `String` 的引用，</mark>由一个额外的 `[0..5]` 部分指定。可以使用一个由中括号中的 `[starting_index..ending_index]` 指定的 range 创建一个 slice，其中 `starting_index` 是 slice 的第一个位置，`ending_index` 则是 slice 最后一个位置的后一个值。在其内部，slice 的数据结构存储了 slice 的开始位置和长度，长度对应于 `ending_index` 减去 `starting_index` 的值。所以对于 `let world = &s[6..11];` 的情况，`world` 将是一个包含指向 `s` 索引 6 的指针和长度值 5 的 slice。
 
 图 4-6 展示了一个图例。
 
@@ -115,13 +115,15 @@ let s = String::from("hello");
 
 let len = s.len();
 
+// xc: 以下均与let slice = &s;不相同，原因在于，虽然这里的slice类型是&String，不等价于以下的slice类型&str。
 let slice = &s[0..len];
 let slice = &s[..];
 ```
+[以上注释详见](#1)
 
 > 注意：字符串 slice range 的索引必须位于有效的 UTF-8 字符边界内，如果尝试从一个多字节字符的中间位置创建字符串 slice，则程序将会因错误而退出。出于介绍字符串 slice 的目的，本部分假设只使用 ASCII 字符集；第八章的 [“使用字符串储存 UTF-8 编码的文本”][strings] 部分会更加全面的讨论 UTF-8 处理问题。
 
-在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。“字符串 slice” 的类型声明写作 `&str`：
+在记住所有这些知识后，让我们重写 `first_word` 来返回一个 slice。<mark>“字符串 slice” 的类型声明写作 `&str`：</mark>
 
 <span class="filename">文件名：src/main.rs</span>
 
@@ -153,7 +155,7 @@ fn second_word(s: &String) -> &str {
 {{#include ../listings/ch04-understanding-ownership/no-listing-19-slice-error/output.txt}}
 ```
 
-回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。在调用 `clear` 之后的 `println!` 使用了 `word` 中的引用，所以这个不可变的引用在此时必须仍然有效。Rust 不允许 `clear` 中的可变引用和 `word` 中的不可变引用同时存在，因此编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
+回忆一下借用规则，当拥有某值的不可变引用时，就不能再获取一个可变引用。<mark>因为 `clear` 需要清空 `String`，它尝试获取一个可变引用。</mark>在调用 `clear` 之后的 `println!` 使用了 `word` 中的引用，所以这个不可变的引用在此时必须仍然有效。Rust 不允许 `clear` 中的可变引用和 `word` 中的不可变引用同时存在，因此编译失败。Rust 不仅使得我们的 API 简单易用，也在编译时就消除了一整类的错误！
 
 <a id="string-literals-are-slices"></a>
 
@@ -165,7 +167,7 @@ fn second_word(s: &String) -> &str {
 let s = "Hello, world!";
 ```
 
-这里 `s` 的类型是 `&str`：它是一个指向二进制程序特定位置的 slice。这也就是为什么字符串字面值是不可变的；`&str` 是一个不可变引用。
+<mark>这里 `s` 的类型是 `&str`：它是一个指向二进制程序特定位置的 slice。这也就是为什么字符串字面值是不可变的；`&str` 是一个不可变引用。</mark>
 
 #### 字符串 slice 作为参数
 
@@ -183,7 +185,8 @@ fn first_word(s: &String) -> &str {
 
 <span class="caption">示例 4-9: 通过将 `s` 参数的类型改为字符串 slice 来改进 `first_word` 函数</span>
 
-如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice 或对 `String` 的引用。这种灵活性利用了 *deref coercions* 的优势，这个特性我们将在[“函数和方法的隐式 Deref 强制转换”][deref-coercions]章节中介绍。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：
+<a id="1"></a>
+<mark>如果有一个字符串 slice，可以直接传递它。如果有一个 `String`，则可以传递整个 `String` 的 slice 或对 `String` 的引用。这种灵活性利用了 *deref coercions* 的优势，这个特性我们将在[“函数和方法的隐式 Deref 强制转换”][deref-coercions]章节中介绍。定义一个获取字符串 slice 而不是 `String` 引用的函数使得我们的 API 更加通用并且不会丢失任何功能：<mark>
 
 <span class="filename">文件名：src/main.rs</span>
 
