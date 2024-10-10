@@ -18,7 +18,7 @@
 
 在作用域中增加 `use` 和路径类似于在文件系统中创建软连接（符号连接，symbolic link）。通过在 crate 根增加 `use crate::front_of_house::hosting`，现在 `hosting` 在作用域中就是有效的名称了，如同 `hosting` 模块被定义于 crate 根一样。通过 `use` 引入作用域的路径也会检查私有性，同其它路径一样。
 
-注意 `use` 只能创建 `use` 所在的特定作用域内的短路径。示例 7-12 将 `eat_at_restaurant` 函数移动到了一个叫 `customer` 的子模块，这又是一个不同于 `use` 语句的作用域，所以函数体不能编译。
+注意 `use` 只能创建 `use` 所在的特定作用域内的短路径。示例 7-12 将 `eat_at_restaurant` 函数移动到了一个叫 `customer` 的子模块，<mark>这又是一个不同于 `use` 语句的作用域，</mark>所以函数体不能编译。
 
 <span class="filename">文件名：src/lib.rs</span>
 
@@ -26,7 +26,7 @@
 {{#rustdoc_include ../listings/ch07-managing-growing-projects/listing-07-12/src/lib.rs}}
 ```
 
-<span class="caption">示例 7-12: `use` 语句只适用于其所在的作用域</span>
+<span class="caption">示例 7-12: <mark>`use` 语句只适用于其所在的作用域</mark></span>
 
 编译器错误显示短路径不再适用于 `customer` 模块中：
 
@@ -72,7 +72,7 @@
 
 <span class="caption">示例 7-15: 使用父模块将两个具有相同名称的类型引入同一作用域</span>
 
-如你所见，使用父模块可以区分这两个 `Result` 类型。如果我们是指定 `use std::fmt::Result` 和 `use std::io::Result`，我们将在同一作用域拥有了两个 `Result` 类型，当我们使用 `Result` 时，Rust 则不知道我们要用的是哪个。
+如你所见，<mark>使用父模块可以区分这两个 `Result` 类型。如果我们是指定 `use std::fmt::Result` 和 `use std::io::Result`，我们将在同一作用域拥有了两个 `Result` 类型，当我们使用 `Result` 时，Rust 则不知道我们要用的是哪个。</mark>
 
 ### 使用 `as` 关键字提供新的名称
 
@@ -116,7 +116,7 @@
 {{#include ../listings/ch02-guessing-game-tutorial/listing-02-02/Cargo.toml:9:}}
 ```
 
-在 *Cargo.toml* 中加入 `rand` 依赖告诉了 Cargo 要从 [crates.io](https://crates.io) 下载 `rand` 和其依赖，并使其可在项目代码中使用。
+<mark>在 *Cargo.toml* 中加入 `rand` 依赖告诉了 Cargo 要从 [crates.io](https://crates.io) 下载 `rand` 和其依赖，并使其可在项目代码中使用。</mark>
 
 接着，为了将 `rand` 定义引入项目包的作用域，我们加入一行 `use` 起始的包名，它以 `rand` 包名开头并列出了需要引入作用域的项。回忆一下第二章的 “生成一个随机数” 部分，我们曾将 `Rng` trait 引入作用域并调用了 `rand::thread_rng` 函数：
 
@@ -180,7 +180,7 @@ use std::collections::HashMap;
 
 ### 通过 glob 运算符将所有的公有定义引入作用域
 
-如果希望将一个路径下 **所有** 公有项引入作用域，可以指定路径后跟 `*`，glob 运算符：
+如果希望将一个路径下 **所有** 公有项引入作用域，可以指定路径后跟<mark>`*`，glob 运算符</mark>：
 
 ```rust
 use std::collections::*;

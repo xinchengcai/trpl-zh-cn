@@ -22,7 +22,7 @@
 
 注意必须首先 `use` 标准库中集合部分的 `HashMap`。在这三个常用集合中，`HashMap` 是最不常用的，所以并没有被 prelude 自动引用。标准库中对 `HashMap` 的支持也相对较少，例如，并没有内建的构建宏。
 
-像 vector 一样，哈希 map 将它们的数据储存在堆上，这个 `HashMap` 的键类型是 `String` 而值类型是 `i32`。类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。
+<mark>像 vector 一样，哈希 map 将它们的数据储存在堆上，</mark>这个 `HashMap` 的键类型是 `String` 而值类型是 `i32`。<mark>类似于 vector，哈希 map 是同质的：所有的键必须是相同类型，值也必须都是相同类型。</mark>
 
 ### 访问哈希 map 中的值
 
@@ -34,7 +34,7 @@
 
 <span class="caption">示例 8-21：访问哈希 map 中储存的蓝队分数</span>
 
-这里，`score` 是与蓝队分数相关的值，应为 `10`。`get` 方法返回 `Option<&V>`，如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。程序中通过调用 `copied` 方法来获取一个 `Option<i32>` 而不是 `Option<&i32>`，接着调用 `unwrap_or` 在  `scores` 中没有该键所对应的项时将其设置为零。
+这里，`score` 是与蓝队分数相关的值，应为 `10`。`get` 方法返回 `Option<&V>`，如果某个键在哈希 map 中没有对应的值，`get` 会返回 `None`。<mark>程序中通过调用 `copied` 方法来获取一个 `Option<i32>` 而不是 `Option<&i32>`，接着调用 `unwrap_or` 在  `scores` 中没有该键所对应的项时将其设置为零。</mark>
 
 可以使用与 vector 类似的方式来遍历哈希 map 中的每一个键值对，也就是 `for` 循环：
 
